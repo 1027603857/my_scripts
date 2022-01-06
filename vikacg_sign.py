@@ -1,15 +1,32 @@
-/*
+'''
 维咔签到
 ====================================
 [task_local]
 #维咔签到
 5 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
-*/
 new Env("维咔签到");
+'''
 
 import os
 import requests
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+logger = logging.getLogger(__name__)
+try:
+    import requests
+except Exception as e:
+    logger.info(str(e) + "\n\n缺少requests模块, 请执行命令：pip3 install requests\n\n")
+    sys.exit(1)
+os.environ['no_proxy'] = '*'
+requests.packages.urllib3.disable_warnings()
+try:
+    from notify import send
+except:
+    logger.info("无推送文件")
+
+Text = ""
 
 # 返回值 list[wskey]
 def get_vikck():
@@ -18,14 +35,15 @@ def get_vikck():
         if len(wskey_list) > 0:
             return wskey_list
         else:
-            print("vikck变量未启用")
+            logger.info("vikck变量未启用")
             sys.exit(1)
     else:
-        print("未添加vikck变量")
+        logger.info("未添加vikck变量")
         sys.exit(0)
 
 # 签到 bool
 def sign(ck):
+        global Text
         url = 'https://www.vikacg.com/wp-json/b2/v1/userMission'
         headers = {
             'Authorization': ck,
@@ -42,23 +60,24 @@ def sign(ck):
         }
         res = requests.post(url=url, headers=headers)
         if res.status_code == 200:
-            print("本次签到获得" + res.text + "枚金币\n")
+            Text += "本次签到获得" + res.text + "枚金币\n\n"
             return True
         else:
-            print("接口错误码: " + str(res.status_code) + "\n")
+            Text += "接口错误码: " + str(res.status_code) + "\n\n"
             return False
 
 if __name__ == '__main__':
     cklist = get_vikck()
-    print("查询到共有%d"%len(cklist) + "个账号\n")
+    Text += "查询到共有%d"%len(cklist) + "个账号\n\n"
     i = 1
     for ck in cklist:
-        print("第%d"%i + "个账号开始签到")
-        print(ck + "\n")
+        Text += "第%d"%i + "个账号开始签到\n\n"
+        logger.info(ck + "\n")
         if sign(ck):
-            print("第%d"%i + "个账号签到成功\n")
+            Text += "第%d"%i + "个账号签到成功\n\n"
         else:
-            print("第%d"%i + "个账号签到失败\n")
-        i = i + 1
-    print("执行完成\n--------------------")
+            Text += "第%d"%i + "个账号签到失败\n\n"
+        i += 1
+    Text += "执行完成\n\n--------------------" 
+    send("维咔签到",Text)
     sys.exit(0)
