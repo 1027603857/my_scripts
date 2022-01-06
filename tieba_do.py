@@ -6,14 +6,14 @@
 ==============Quantumult X==============
 [task_local]
 #幸运大转盘
-4 10 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_market_lottery.js, tag=幸运大转盘, enabled=true
+4 10 * * * https://github.com/1027603857/my_scripts/edit/main/tieba_do.py, tag=幸运大转盘, enabled=true
 ==============Loon==============
 [Script]
-cron "4 10 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_market_lottery.js,tag=幸运大转盘
+cron "4 10 * * *" https://github.com/1027603857/my_scripts/edit/main/tieba_do.py,tag=幸运大转盘
 ================Surge===============
-幸运大转盘 = type=cron,cronexp="4 10 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_market_lottery.js
+幸运大转盘 = type=cron,cronexp="4 10 * * *",wake-system=1,timeout=3600,https://github.com/1027603857/my_scripts/edit/main/tieba_do.py
 ===============小火箭==========
-幸运大转盘 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_market_lottery.js, cronexpr="4 10 * * *", timeout=3600, enable=true
+幸运大转盘 = type=cron,script-path=https://github.com/1027603857/my_scripts/edit/main/tieba_do.py, cronexpr="4 10 * * *", timeout=3600, enable=true
 */
 
 import requests
