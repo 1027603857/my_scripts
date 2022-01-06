@@ -68,6 +68,7 @@ def sign(ck):
 
 if __name__ == '__main__':
     cklist = get_vikck()
+    Text += "--------------------\n开始执行\n\n"
     Text += "查询到共有%d"%len(cklist) + "个账号\n\n"
     i = 1
     for ck in cklist:
@@ -78,6 +79,6 @@ if __name__ == '__main__':
         else:
             Text += "第%d"%i + "个账号签到失败\n\n"
         i += 1
-    Text += "执行完成\n\n--------------------" 
+    Text += "执行完成\n--------------------\n" 
     send("维咔签到",Text)
     sys.exit(0)
