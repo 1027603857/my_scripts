@@ -6,6 +6,7 @@
 */5 * * * * tieba_do.py, tag=贴吧签到, enabled=true
 */
 new Env("贴吧签到");
+
 import requests
 url = "http://zlong.asia/TiebaSign/do.php"
 
