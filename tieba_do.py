@@ -1,3 +1,9 @@
+/*
+[task_local]
+#贴吧签到
+*/5 * * * * tieba_do.py, tag=贴吧签到, enabled=true
+ */
+
 import requests
 url = "http://zlong.asia/TiebaSign/do.php"
 
