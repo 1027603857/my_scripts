@@ -3,7 +3,7 @@
 ====================================
 [task_local]
 #维咔签到
-45 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
+5 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
 new Env("维咔签到");
 '''
 
@@ -60,25 +60,37 @@ def sign(ck):
         }
         res = requests.post(url=url, headers=headers)
         if res.status_code == 200:
-            Text += "本次签到获得" + res.text + "枚金币\n\n"
+            print(res.text)
+            if res.text.find("credit") == -1:
+                Text += "今日已签到，获得" + getmidstring(res.text, "\"", "\"") + "枚金币\n\n"
+            else:
+                Text += "本次签到获得" + getmidstring(res.text, "\"credit\":", ",") + "枚金币\n\n"
             return True
         else:
-            Text += "接口错误码: " + str(res.status_code) + "\n\n"
+            Text += "签到失败，可能是网络错误或Cookie过期"\n\n"
             return False
+
+def getmidstring(html, start_str, end):
+    start = html.find(start_str)
+    if start >= 0:
+        start += len(start_str)
+        end = html.find(end, start)
+        if end >= 0:
+            return html[start:end].strip()
 
 if __name__ == '__main__':
     cklist = get_vikck()
-    Text += "--------------------\n开始执行\n\n"
+    Text += "开始执行\n--------------------\n"
     Text += "查询到共有%d"%len(cklist) + "个账号\n\n"
     i = 1
     for ck in cklist:
         Text += "第%d"%i + "个账号开始签到\n\n"
         logger.info(ck + "\n")
         if sign(ck):
-            Text += "第%d"%i + "个账号签到成功\n\n"
+            Text += "第%d"%i + "个账号签到成功\n--------------------\n"
         else:
-            Text += "第%d"%i + "个账号签到失败\n\n"
+            Text += "第%d"%i + "个账号签到失败\n--------------------\n"
         i += 1
-    Text += "执行完成\n--------------------\n" 
+    Text += "执行完成\n" 
     send("维咔签到",Text)
     sys.exit(0)
