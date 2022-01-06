@@ -3,7 +3,7 @@
 ====================================
 [task_local]
 #维咔签到
-5 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
+45 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
 new Env("维咔签到");
 '''
 
