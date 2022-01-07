@@ -3,7 +3,7 @@
 ====================================
 [task_local]
 #维咔签到
-5 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
+10 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
 new Env("维咔签到");
 '''
 
@@ -44,7 +44,7 @@ def get_vikck():
 # 签到 bool
 def sign(ck):
         global Text
-        url = 'https://www.vikacg.com/wp-json/b2/v1/userMission'
+        url = 'https://www.vikacg.com/wp-json/b2/v1/getUserInfo'
         headers = {
             'Authorization': ck,
             'Host': 'www.vikacg.com',
@@ -58,6 +58,8 @@ def sign(ck):
             'Referer': 'https://www.vikacg.com/mission/today',
             'Accept-Language': 'zh-CN,zh;q=0.9'
         }
+        requests.post(url=url, headers=headers)
+        url = 'https://www.vikacg.com/wp-json/b2/v1/userMission'
         res = requests.post(url=url, headers=headers)
         if res.status_code == 200:
             print(res.text)
