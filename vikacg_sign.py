@@ -67,7 +67,7 @@ def sign(ck):
                 Text += "本次签到获得" + getmidstring(res.text, "\"credit\":", ",") + "枚金币\n\n"
             return True
         else:
-            Text += "签到失败，可能是网络错误或Cookie过期"\n\n"
+            Text += "签到失败，可能是网络错误或Cookie过期\n\n"
             return False
 
 def getmidstring(html, start_str, end):
