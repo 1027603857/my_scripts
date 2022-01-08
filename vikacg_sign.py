@@ -83,7 +83,7 @@ def getmidstring(html, start_str, end):
 if __name__ == '__main__':
     cklist = get_vikck()
     Text += "开始执行\n--------------------\n"
-    Text += "查询到共有%d"%len(cklist) + "个账号\n\n"
+    Text += "查询到共有%d"%len(cklist) + "个账号\n--------------------\n"
     i = 1
     for ck in cklist:
         Text += "第%d"%i + "个账号开始签到\n\n"
