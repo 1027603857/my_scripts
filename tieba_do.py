@@ -29,5 +29,7 @@ url = "http://zlong.asia/TiebaSign/do.php"
 
 # 最简单的get请求
 r = requests.get(url)
-if (r.status_code != 200):
+if (r.status_code == 200):
+    logger.info("执行成功")
+else:
     send("贴吧签到监控", "服务器访问错误，错误代码：%d"%r.status_code)
