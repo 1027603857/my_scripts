@@ -3,7 +3,7 @@
 ====================================
 [task_local]
 #维咔签到
-10 10 * * * vikacg_sign.py, tag=维咔签到, enabled=true
+10 0 * * * vikacg_sign.py, tag=维咔签到, enabled=true
 new Env("维咔签到");
 '''
 
@@ -43,34 +43,39 @@ def get_vikck():
 
 # 签到 bool
 def sign(ck):
-        global Text
-        url = 'https://www.vikacg.com/wp-json/b2/v1/getUserInfo'
-        headers = {
-            'Authorization': ck,
-            'Host': 'www.vikacg.com',
-            'Connection': 'keep-alive',
-            'Accept': 'application/json, text/plain, */*',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
-            'Origin': 'https://www.vikacg.com',
-            'Sec-Fetch-Site': 'same-origin',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Dest': 'empty',
-            'Referer': 'https://www.vikacg.com/mission/today',
-            'Accept-Language': 'zh-CN,zh;q=0.9'
-        }
-        requests.post(url=url, headers=headers)
-        url = 'https://www.vikacg.com/wp-json/b2/v1/userMission'
-        res = requests.post(url=url, headers=headers)
-        if res.status_code == 200:
+    global Text
+    url = "https://www.vikacg.com/wp-json/b2/v1/getUserMission"
+    data = "count=10&paged=1"
+    headers = {
+        'Authorization': ck,
+        'Host': 'www.vikacg.com',
+        'Connection': 'keep-alive',
+        'Accept': 'application/json, text/plain, */*',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+        'Origin': 'https://www.vikacg.com',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'https://www.vikacg.com/mission/today',
+        'Accept-Language': 'zh-CN,zh;q=0.9'
+    }
+    res = requests.post(url=url, headers=headers ,data=data)
+    print(res.text)
+    if res.status_code == 200:
+        if getmidstring(res.text, "\"credit\":", ",") == "0":
+            url = 'https://www.vikacg.com/wp-json/b2/v1/userMission'
+            res = requests.post(url=url, headers=headers)
             print(res.text)
-            if res.text.find("credit") == -1:
-                Text += "今日已签到，获得" + getmidstring(res.text, "\"", "\"") + "枚金币\n\n"
-            else:
+            if res.text.find("credit") != -1:
                 Text += "本次签到获得" + getmidstring(res.text, "\"credit\":", ",") + "枚金币\n\n"
-            return True
+            else:
+                Text += "今日已签到，获得" + getmidstring(res.text, "\"", "\"") + "枚金币\n\n"
         else:
-            Text += "签到失败，可能是网络错误或Cookie过期\n\n"
-            return False
+            Text += "今日已签到，获得" + getmidstring(res.text, "\"credit\":\"", "\"") + "枚金币\n\n"
+        return True
+    else:
+        Text += "签到失败，可能是网络错误或Cookie过期\n\n"
+        return False
 
 def getmidstring(html, start_str, end):
     start = html.find(start_str)
