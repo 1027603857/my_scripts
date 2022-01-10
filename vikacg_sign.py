@@ -28,6 +28,11 @@ except:
 
 Text = ""
 
+def prints(text):
+    global Text
+    print(text)
+    Text += text
+
 # 返回值 list[wskey]
 def get_vikck():
     if "vikck" in os.environ:
@@ -43,7 +48,6 @@ def get_vikck():
 
 # 签到 bool
 def sign(ck):
-    global Text
     url = "https://www.vikacg.com/wp-json/b2/v1/getUserMission"
     data = "count=10&paged=1"
     headers = {
@@ -67,14 +71,14 @@ def sign(ck):
             res = requests.post(url=url, headers=headers)
             print(res.text)
             if res.text.find("credit") != -1:
-                Text += "本次签到获得" + getmidstring(res.text, "\"credit\":", ",") + "枚金币\n\n"
+                prints("本次签到获得" + getmidstring(res.text, "\"credit\":", ",") + "枚金币\n\n")
             else:
-                Text += "今日已签到，获得" + getmidstring(res.text, "\"", "\"") + "枚金币\n\n"
+                prints("今日已签到，获得" + getmidstring(res.text, "\"", "\"") + "枚金币\n\n")
         else:
-            Text += "今日已签到，获得" + getmidstring(res.text, "\"credit\":\"", "\"") + "枚金币\n\n"
+             prints("今日已签到，获得" + getmidstring(res.text, "\"credit\":\"", "\"") + "枚金币\n\n")
         return True
     else:
-        Text += "签到失败，可能是网络错误或Cookie过期\n\n"
+        prints("签到失败，可能是网络错误或Cookie过期\n\n")
         return False
 
 def getmidstring(html, start_str, end):
@@ -87,17 +91,17 @@ def getmidstring(html, start_str, end):
 
 if __name__ == '__main__':
     cklist = get_vikck()
-    Text += "开始执行\n--------------------\n"
-    Text += "查询到共有%d"%len(cklist) + "个账号\n--------------------\n"
+    prints("开始执行\n--------------------\n")
+    prints("查询到共有%d"%len(cklist) + "个账号\n--------------------\n")
     i = 1
     for ck in cklist:
-        Text += "第%d"%i + "个账号开始签到\n\n"
+        prints("第%d"%i + "个账号开始签到\n\n")
         logger.info(ck + "\n")
         if sign(ck):
-            Text += "第%d"%i + "个账号签到成功\n--------------------\n"
+            prints("第%d"%i + "个账号签到成功\n--------------------\n")
         else:
-            Text += "第%d"%i + "个账号签到失败\n--------------------\n"
+            prints("第%d"%i + "个账号签到失败\n--------------------\n")
         i += 1
-    Text += "执行完成\n" 
+    prints("执行完成\n")
     send("维咔签到",Text)
     sys.exit(0)
