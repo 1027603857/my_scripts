@@ -56,7 +56,7 @@ def sign():
     res = requests.post(url=url, headers=headers ,data=data)
     print(res.text)
     if res.status_code == 200:
-        prints(getmidstring(res.text, "content:'", "'") + "\n\n")
+        prints(getmidstring(res.text, "content: '", "'") + "\n\n")
         return True
     else:
         prints("填报失败，可能是网络错误或Cookie过期\n\n")
