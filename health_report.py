@@ -33,8 +33,21 @@ def prints(text):
     print(text)
     Text += text
 
+# 返回值 list[healthck]
+def get_healthck():
+    if "healthck" in os.environ:
+        wskey_list = os.environ['healthck'].split('&')
+        if len(wskey_list) > 0:
+            return wskey_list
+        else:
+            logger.info("healthck变量未启用")
+            sys.exit(1)
+    else:
+        logger.info("未添加healthck变量")
+        sys.exit(0)
+
 # 签到 bool
-def sign():
+def sign(ck):
     url = "http://xgsys.swjtu.edu.cn/SPCPTest3/Web/Report/Index"
     headers = {
         'Host': 'xgsys.swjtu.edu.cn',
@@ -48,12 +61,13 @@ def sign():
         'X-Requested-With': 'com.tencent.mm',
         'Referer': 'http://xgsys.swjtu.edu.cn/SPCPTest3/Web/Report/Index',
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Cookie': 'WXOpenid=oV6nVs3gpcdteELGPHTI-80ileas; CenterSoftSPCPSwjtuWeb=3AFB1D324C0D3AEFEEE1A2FFEA092BE12981E800212084EFC7CC9AE85C941082BA5C75A99BCABB9B99C64F38842148FBD78354ADA5C38145842B470705875FD773DB87D337DFEE41314D22752FED6124AF3EEEDF082261E9472C6685122F0ACA14F5551C8CD71CE5EA80599B4501F51F7B9557FEE7F017D9B7DDEAEADAC157278D8717C96962C4394983825ABEF6D24470EA10A699621959AAB11FF91DB7536824530057C6088D8B63A180AC1540FF96ECE27F3B4B840A8508ADFF745F135381063AB54951507A560E6C92B70047BAF9A894ABC1D6BE5B8D885A36E50E66F6D0E5ABD9B7357D510698A49B195E29BAF8AEFE5918D3BCFB3C3A1B79803F26362FA4DF7DA9486C577A8929AFB5E9CDDCBBD3AFE48CE2C31EB89E06C1433AC389D6E8E4B780422B25D33FC696E5C65F2124115E5FED9A6B6CFBCF34B5963A73F5429E5F63F40E158AB437B1F1A9CCA91B0120AE265770D1E74BE693E09BC781E4EC5DE842069BD093F6E9B9DCF9A2A8619F; ASP.NET_SessionId=yy2ml0kc1r0njys5es1u5ajs'
+        'Cookie': ck
     }
     res = requests.get(url=url, headers=headers)
     if res.text.find("ReSubmiteFlag") == -1:
         if res.text.find("已登记") == -1:
-            sys.exit(1)
+            prints("未知错误，请检查日志！\n\n")
+            return False
         prints("今日已填报\n\n")
         return False
     ReSubmiteFlag = getmidstring(res.text, "<input name=\"ReSubmiteFlag\" type=\"hidden\" value=\"", "\"")
@@ -77,7 +91,18 @@ def getmidstring(html, start_str, end):
             return html[start:end].strip()
 
 if __name__ == '__main__':
-    sign()
+    cklist = get_healthck()
+    prints("开始执行\n--------------------\n")
+    prints("查询到共有%d"%len(cklist) + "个账号\n--------------------\n")
+    i = 1
+    for ck in cklist:
+        prints("第%d"%i + "个账号开始健康填报\n\n")
+        logger.info(ck + "\n")
+        if sign(ck):
+            prints("第%d"%i + "个账号签到成功\n--------------------\n")
+        else:
+            prints("第%d"%i + "个账号签到失败\n--------------------\n")
+        i += 1
     prints("执行完成\n")
     send("健康填报",Text)
     sys.exit(0)
