@@ -66,7 +66,7 @@ def sign(ck):
     res = requests.get(url=url, headers=headers)
     if res.text.find("ReSubmiteFlag") == -1:
         if res.text.find("已登记") == -1:
-            prints("未知错误，请检查日志！\n\n")
+            prints("未知错误，可能是cookie过期，请检查日志！\n\n")
             return False
         prints("今日已填报\n\n")
         return False
