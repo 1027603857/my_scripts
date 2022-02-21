@@ -92,7 +92,7 @@ def getmidstring(html, start_str, end):
 
 if __name__ == '__main__':
     cklist = get_healthck()
-    prints("开始执行\n--------------------\n")
+    prints("开始执行\n每日自动健康填报 by zjl\n--------------------\n")
     prints("查询到共有%d"%len(cklist) + "个账号\n--------------------\n")
     i = 1
     for ck in cklist:
