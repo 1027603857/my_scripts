@@ -3,7 +3,7 @@
 ====================================
 [task_local]
 #贴吧签到
-*/5 * * * * tieba_do.py, tag=贴吧签到, enabled=true
+*/5 0-2 * * * tieba_do.py, tag=贴吧签到, enabled=true
 new Env("贴吧签到");
 '''
 
