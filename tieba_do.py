@@ -25,7 +25,7 @@ try:
 except:
     logger.info("无推送文件")
 
-url = "http://zlong.asia/TiebaSign/do.php"
+url = "http://43.134.226.172/do.php?pw="
 
 # 最简单的get请求
 r = requests.get(url)
