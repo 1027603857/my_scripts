@@ -1,4 +1,5 @@
-!Title:lanzouban
+[lanzou ban]
+! Title: lanzouban
 lanzoua.com
 lanzoub.com
 lanzouc.com
