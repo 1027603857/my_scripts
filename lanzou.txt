@@ -8,6 +8,7 @@ lanzoue.com
 lanzouf.com
 lanzoug.com
 lanzouh.com
+lanzoui.com
 lanzouj.com
 lanzouk.com
 lanzoul.com
@@ -19,7 +20,7 @@ lanzouq.com
 lanzour.com
 lanzous.com
 lanzout.com
-lanzouu.com
+#lanzouu.com
 lanzouv.com
 lanzouw.com
 lanzoux.com
